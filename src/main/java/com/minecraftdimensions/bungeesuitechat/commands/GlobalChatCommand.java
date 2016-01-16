@@ -1,21 +1,32 @@
 package com.minecraftdimensions.bungeesuitechat.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.minecraftdimensions.bungeesuitechat.BungeeSuiteChat;
-import com.minecraftdimensions.bungeesuitechat.managers.PlayerManager;
 
-public class ReloadChatCommand implements CommandExecutor {
+public class GlobalChatCommand implements CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
-
-		PlayerManager.reloadChat(sender);
-		BungeeSuiteChat.instance.setupConfig();
+		
+		if(BungeeSuiteChat.global){
+			BungeeSuiteChat.global = false;
+			
+			sender.sendMessage(ChatColor.GREEN + "Globaler Chat deaktiviert.");
+			
+		}else{
+			BungeeSuiteChat.global = true;
+			
+			sender.sendMessage(ChatColor.GREEN + "Globaler Chat aktiviert.");
+		}
+		
 		return true;
 	}
+	
+	
 
 }

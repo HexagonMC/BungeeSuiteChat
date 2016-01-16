@@ -28,6 +28,8 @@ public class BungeeSuiteChat extends JavaPlugin {
     public static boolean usingVault;
     public static boolean factionChat = false;
     public static boolean towny = false;
+    public static boolean global = true;
+    public static boolean mute = false;
 
     @Override
     public void onEnable() {
@@ -38,8 +40,19 @@ public class BungeeSuiteChat extends JavaPlugin {
         startTasks();
         setupTowny();
         setupFactions();
+        setupConfig();
     }
 
+    public void setupConfig() {
+        getConfig().addDefault("bungeesuite.chat.global", true);
+        getConfig().options().copyDefaults(true);
+        this.saveConfig();
+        
+        if(!getConfig().getBoolean("bungeesuite.chat.global")){
+        	global = false;
+        }
+    }
+    
     private void startTasks() {
 
         this.getServer().getScheduler().runTaskTimerAsynchronously( this, new Runnable() {
@@ -108,6 +121,9 @@ public class BungeeSuiteChat extends JavaPlugin {
         getCommand( "unignore" ).setExecutor( new UnignoreCommand() );
         getCommand( "unmute" ).setExecutor( new UnMuteCommand() );
         getCommand( "unmuteall" ).setExecutor( new UnMuteAllCommand() );
+        getCommand( "globalchat" ).setExecutor( new GlobalChatCommand() );
+        getCommand( "servermute" ).setExecutor( new ServerMuteCommand() );
+
 
         //TODO
         //		getCommand("createchannel").setExecutor(new WhoisCommand(this));

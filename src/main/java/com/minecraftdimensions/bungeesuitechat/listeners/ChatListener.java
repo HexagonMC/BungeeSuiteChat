@@ -31,7 +31,14 @@ public class ChatListener implements Listener {
             e.getPlayer().sendMessage( ChatColor.RED + "You do not have permission to talk in this channel" );
             return;
         }
-        e.setFormat( p.getChannelFormat() );
+        
+        if( BungeeSuiteChat.mute && !e.getPlayer().hasPermission("bungeesuite.chat.mute.bypass")){
+        	e.setCancelled( true );
+        	e.getPlayer().sendMessage( ChatColor.RED + "Die Eventleitung hat den Chat aktuell deaktiviert.");
+        	return;
+        }
+        
+         e.setFormat( p.getChannelFormat() );
         if ( ChannelManager.isLocal( p.getChannel() ) ) {
             e.getRecipients().removeAll( ChannelManager.getNonLocal( e.getPlayer() ) );
             e.getRecipients().removeAll( ChannelManager.getIgnores( e.getPlayer() ) );
@@ -39,7 +46,7 @@ public class ChatListener implements Listener {
             e.getRecipients().clear();
             e.getRecipients().addAll( ChannelManager.getServerPlayers() );
             e.getRecipients().removeAll( ChannelManager.getIgnores( e.getPlayer() ) );
-        } else if ( ChannelManager.isGlobal( p.getChannel() ) ) {
+        }else if ( ChannelManager.isGlobal( p.getChannel() ) ) {
             e.getRecipients().clear();
             e.getRecipients().addAll( ChannelManager.getGlobalPlayers() );
             e.getRecipients().removeAll( ChannelManager.getIgnores( e.getPlayer() ) );

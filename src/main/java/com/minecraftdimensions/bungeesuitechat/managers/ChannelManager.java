@@ -323,17 +323,20 @@ public class ChannelManager {
     }
 
     public static void sendGlobalChat( String name, String message ) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream( b );
-        try {
-            out.writeUTF( "GlobalChat" );
-            out.writeUTF( name );
-            out.writeUTF( message );
-        } catch ( IOException s ) {
-            s.printStackTrace();
-        }
-        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
+    	if(BungeeSuiteChat.global){
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            DataOutputStream out = new DataOutputStream( b );
+            try {
+                out.writeUTF( "GlobalChat" );
+                out.writeUTF( name );
+                out.writeUTF( message );
+            } catch ( IOException s ) {
+                s.printStackTrace();
+            }
+            new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
+    	}
 
+        
     }
 
     public static void getGlobalChat( String player, String message ) {
