@@ -1,20 +1,12 @@
 package com.minecraftdimensions.bungeesuitechat;
 
 
-import com.massivecraft.factions.Factions;
 import com.minecraftdimensions.bungeesuitechat.commands.*;
 import com.minecraftdimensions.bungeesuitechat.commands.channel.*;
-import com.minecraftdimensions.bungeesuitechat.commands.factions.FactionChatAllyCommand;
-import com.minecraftdimensions.bungeesuitechat.commands.factions.FactionChatCommand;
-import com.minecraftdimensions.bungeesuitechat.commands.factions.FactionChatFactionCommand;
-import com.minecraftdimensions.bungeesuitechat.commands.towny.TownyChatCommand;
-import com.minecraftdimensions.bungeesuitechat.commands.towny.TownyChatNationCommand;
-import com.minecraftdimensions.bungeesuitechat.commands.towny.TownyChatTownCommand;
 import com.minecraftdimensions.bungeesuitechat.listeners.*;
 import com.minecraftdimensions.bungeesuitechat.managers.ChannelManager;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,8 +18,6 @@ public class BungeeSuiteChat extends JavaPlugin {
     public static BungeeSuiteChat instance;
     public static Chat CHAT = null;
     public static boolean usingVault;
-    public static boolean factionChat = false;
-    public static boolean towny = false;
     public static boolean global = true;
     public static boolean mute = false;
 
@@ -38,8 +28,6 @@ public class BungeeSuiteChat extends JavaPlugin {
         usingVault = setupVault();
         registerListeners();
         startTasks();
-        setupTowny();
-        setupFactions();
         setupConfig();
     }
 
@@ -74,29 +62,6 @@ public class BungeeSuiteChat extends JavaPlugin {
 
     }
 
-    public void setupTowny() {
-        towny = Bukkit.getPluginManager().getPlugin( "Towny" ) != null;
-        if ( towny ) {
-            Bukkit.getConsoleSender().sendMessage( ChatColor.GREEN + "Towny detected, hooking in!" );
-            getCommand( "townychat" ).setExecutor( new TownyChatCommand() );
-            getCommand( "townychattown" ).setExecutor( new TownyChatTownCommand() );
-            getCommand( "townychatnation" ).setExecutor( new TownyChatNationCommand() );
-        }
-    }
-
-    public void setupFactions() {
-        Factions factions = ( Factions ) Bukkit.getPluginManager().getPlugin( "Factions" );
-        if ( factions != null ) {
-            if ( !factions.getDescription().getVersion().startsWith( "1" ) ) {
-                Bukkit.getConsoleSender().sendMessage( ChatColor.GREEN + "Factions detected, hooking in!" );
-                factionChat = true;
-                getCommand( "factionchat" ).setExecutor( new FactionChatCommand() );
-                getCommand( "factionchatally" ).setExecutor( new FactionChatAllyCommand() );
-                getCommand( "factionchatfaction" ).setExecutor( new FactionChatFactionCommand() );
-            }
-        }
-    }
-
     private void registerCommands() {
         getCommand( "admin" ).setExecutor( new AdminCommand() );
         getCommand( "afk" ).setExecutor( new AfkCommand() );
@@ -124,14 +89,6 @@ public class BungeeSuiteChat extends JavaPlugin {
         getCommand( "globalchat" ).setExecutor( new GlobalChatCommand() );
         getCommand( "servermute" ).setExecutor( new ServerMuteCommand() );
 
-
-        //TODO
-        //		getCommand("createchannel").setExecutor(new WhoisCommand(this));
-        //		getCommand("deletechannel").setExecutor(new WhoisCommand(this));
-        //		getCommand("leavechannel").setExecutor(new WhoisCommand(this));
-        //		getCommand("joinchannel").setExecutor(new WhoisCommand(this));
-        //		getCommand("kickchannel").setExecutor(new WhoisCommand(this));
-        //		getCommand("setchannelowner").setExecutor(new WhoisCommand(this));
 
     }
 

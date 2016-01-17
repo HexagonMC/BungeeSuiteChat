@@ -147,14 +147,6 @@ public class MessageListener implements PluginMessageListener {
         if ( channel.equals( "Reload" ) ) {
             ChannelManager.reload();
         }
-        if ( channel.equals( "PluginCheck" ) ) {
-            if ( BungeeSuiteChat.factionChat ) {
-                ChannelManager.requestFactionChannels();
-            }
-            if ( BungeeSuiteChat.towny ) {
-                ChannelManager.requestTownyChannels();
-            }
-        }
     }
 
 }

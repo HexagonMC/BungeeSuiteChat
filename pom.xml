@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>BungeeSuiteChat</artifactId>
-    <version>0.5</version>
+    <version>0.51</version>
     <properties>
         <build.number>${BUILD_NUMBER}</build.number>
     </properties>
@@ -14,8 +14,7 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <name>vault</name>
-            <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
     </repositories>
 
@@ -23,33 +22,12 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.2-R0.1-SNAPSHOT</version>
+            <version>1.7.9-R0.2</version>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.2.27-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft.factions</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.2.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Factions.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft.mcore</groupId>
-            <artifactId>mcore</artifactId>
-            <version>6.9.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/mcore.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.palmergames.bukkit</groupId>
-            <artifactId>towny</artifactId>
-            <version>0.84.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Towny.jar</systemPath>
+            <version>1.4.1</version>
         </dependency>
     </dependencies>
     <build>

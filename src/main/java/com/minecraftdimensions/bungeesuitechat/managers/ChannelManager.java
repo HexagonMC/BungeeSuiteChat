@@ -1,21 +1,11 @@
 package com.minecraftdimensions.bungeesuitechat.managers;
 
-import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.FactionColls;
-import com.massivecraft.factions.entity.UPlayer;
 import com.minecraftdimensions.bungeesuitechat.BungeeSuiteChat;
 import com.minecraftdimensions.bungeesuitechat.objects.BSPlayer;
 import com.minecraftdimensions.bungeesuitechat.objects.Channel;
 import com.minecraftdimensions.bungeesuitechat.objects.ServerData;
 import com.minecraftdimensions.bungeesuitechat.tasks.PluginMessageTask;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -117,22 +107,6 @@ public class ChannelManager {
         return channel.getName().equals( "Admin" );
     }
 
-    public static boolean isFactionChannel( Channel channel ) {
-        return channel.getName().equals( "Faction" ) || channel.getName().equals( "FactionAlly" );
-    }
-
-    public static boolean isTownyChannel( Channel channel ) {
-        return channel.getName().equals( "Town" ) || channel.getName().equals( "Nation" );
-    }
-
-    public static boolean isFaction( Channel channel ) {
-        return channel.getName().equals( "Faction" );
-    }
-
-    public static boolean isFactionAlly( Channel channel ) {
-        return channel.getName().equals( "FactionAlly" );
-    }
-
     public static Collection<Player> getNonLocal( Player player ) {
         Collection<Player> nonLocals = new ArrayList<>();
         for ( Player p : Bukkit.getOnlinePlayers() ) {
@@ -163,37 +137,6 @@ public class ChannelManager {
             }
         }
         return globalPlayers;
-    }
-
-    public static Collection<Player> getFactionPlayers( Player p ) {
-        Collection<Player> factionPlayers = new ArrayList<>();
-        UPlayer uplayer = UPlayer.get( p );
-        for ( Player ps : uplayer.getFaction().getOnlinePlayers() ) {
-            if ( ps.hasPermission( "bungeesuite.chat.channel.faction" ) ) {
-                factionPlayers.add( ps );
-            }
-        }
-        return factionPlayers;
-    }
-
-    public static Collection<Player> getFactionAllyPlayers( Player p ) {
-        Collection<Player> factionPlayers = new ArrayList<>();
-        UPlayer uplayer = UPlayer.get( p );
-        Map<Rel, List<String>> rels = uplayer.getFaction().getFactionNamesPerRelation( uplayer.getFaction() );
-        for ( Player ps : uplayer.getFaction().getOnlinePlayers() ) {
-            if ( ps.hasPermission( "bungeesuite.chat.channel.factionally" ) ) {
-                factionPlayers.add( ps );
-            }
-        }
-        for ( String data : rels.get( Rel.ALLY ) ) {
-            Faction f = FactionColls.get().getForUniverse( uplayer.getFaction().getUniverse() ).getByName( ChatColor.stripColor( data ) );
-            for ( Player ps : f.getOnlinePlayers() ) {
-                if ( ps.hasPermission( "bungeesuite.chat.channel.factionally" ) ) {
-                    factionPlayers.add( ps );
-                }
-            }
-        }
-        return factionPlayers;
     }
 
     public static Collection<BSPlayer> getBSGlobalPlayers() {
@@ -254,35 +197,6 @@ public class ChannelManager {
         getDefaultChannels();
     }
 
-    public static boolean getFactionChannelPerm( CommandSender sender ) {
-        if ( !BungeeSuiteChat.factionChat ) {
-            return false;
-        }
-        UPlayer p = UPlayer.get( sender );
-        if ( !p.hasFaction() ) {
-            return false;
-        }
-        if ( p.getFaction().isDefault() ) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean getTownyChannelPerm( CommandSender sender ) {
-        if ( !BungeeSuiteChat.towny ) {
-            return false;
-        }
-        Resident r;
-        try {
-            r = TownyUniverse.getDataSource().getResident( sender.getName() );
-        } catch ( NotRegisteredException e ) {
-            return false;
-        }
-        if ( !r.hasTown() ) {
-            return false;
-        }
-        return true;
-    }
 
     public static void togglePlayersChannel( CommandSender sender ) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -290,9 +204,6 @@ public class ChannelManager {
         try {
             out.writeUTF( "TogglePlayersChannel" );
             out.writeUTF( sender.getName() );
-            out.writeBoolean( getFactionChannelPerm( sender ) );
-            out.writeBoolean( getTownyChannelPerm( sender ) );
-            out.writeBoolean( inNation( sender ) );
             out.writeBoolean( sender.hasPermission( "bungeesuite.chat.toggle.bypass" ) );
         } catch ( IOException s ) {
             s.printStackTrace();
@@ -308,13 +219,6 @@ public class ChannelManager {
             out.writeUTF( "TogglePlayerToChannel" );
             out.writeUTF( sender.getName() );
             out.writeUTF( channel );
-            out.writeBoolean( getFactionChannelPerm( sender ) );
-            out.writeBoolean( getTownyChannelPerm( sender ) );
-            if ( BungeeSuiteChat.towny ) {
-                out.writeBoolean( inNation( sender ) );
-            } else {
-                out.writeBoolean( false );
-            }
             out.writeBoolean( sender.hasPermission( "bungeesuite.chat.toggle.bypass" ) );
         } catch ( IOException s ) {
             s.printStackTrace();
@@ -374,33 +278,6 @@ public class ChannelManager {
         }
     }
 
-    public static void togglePlayersFactionChannels( CommandSender sender ) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream( b );
-        try {
-            out.writeUTF( "TogglePlayersFactionsChannel" );
-            out.writeUTF( sender.getName() );
-            out.writeBoolean( getFactionChannelPerm( sender ) );
-        } catch ( IOException s ) {
-            s.printStackTrace();
-        }
-        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
-    }
-
-    public static void togglePlayersTownyChannels( CommandSender sender ) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream( b );
-        try {
-            out.writeUTF( "TogglePlayersTownyChannel" );
-            out.writeUTF( sender.getName() );
-            out.writeBoolean( getTownyChannelPerm( sender ) );
-            out.writeBoolean( inNation( sender ) );
-        } catch ( IOException s ) {
-            s.printStackTrace();
-        }
-        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
-    }
-
     public static boolean playerHasPermissionToTalk( BSPlayer p ) {
         Channel c = p.getChannel();
         if ( c.isDefault ) {
@@ -410,82 +287,47 @@ public class ChannelManager {
                 return p.getPlayer().hasPermission( "bungeesuite.chat.channel.server" );
             } else if ( ChannelManager.isLocal( c ) ) {
                 return p.getPlayer().hasPermission( "bungeesuite.chat.channel.local" );
-            } else if ( BungeeSuiteChat.factionChat && ChannelManager.isFactionChannel( c ) ) {
-                if ( ChannelManager.isFaction( c ) ) {
-                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.faction" );
-                } else if ( ChannelManager.isFactionAlly( c ) ) {
-                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.factionally" );
-                }
-            } else if ( BungeeSuiteChat.towny && isTownyChannel( c ) ) {
-                if ( c.getName().equals( "Town" ) ) {
-                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.town" );
-                }
-                if ( c.getName().equals( "Nation" ) ) {
-                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.nation" );
-                }
             } else {
                 return ChannelManager.isAdmin( c ) && p.getPlayer().hasPermission( "bungeesuite.chat.channel.admin" );
             }
         } else {
             return p.getPlayer().hasPermission( "bungeesuite.chat.channel.custom" );
         }
-        return false;
-
     }
+    
+    
+//    public static boolean playerHasPermissionToTalk( BSPlayer p ) {
+//        Channel c = p.getChannel();
+//        if ( c.isDefault ) {
+//            if ( ChannelManager.isGlobal( c ) ) {
+//                return p.getPlayer().hasPermission( "bungeesuite.chat.channel.global" );
+//            } else if ( ChannelManager.isServer( c ) ) {
+//                return p.getPlayer().hasPermission( "bungeesuite.chat.channel.server" );
+//            } else if ( ChannelManager.isLocal( c ) ) {
+//                return p.getPlayer().hasPermission( "bungeesuite.chat.channel.local" );
+//            } else if ( BungeeSuiteChat.factionChat && ChannelManager.isFactionChannel( c ) ) {
+//                if ( ChannelManager.isFaction( c ) ) {
+//                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.faction" );
+//                } else if ( ChannelManager.isFactionAlly( c ) ) {
+//                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.factionally" );
+//                }
+//            } else if ( BungeeSuiteChat.towny && isTownyChannel( c ) ) {
+//                if ( c.getName().equals( "Town" ) ) {
+//                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.town" );
+//                }
+//                if ( c.getName().equals( "Nation" ) ) {
+//                    return p.getPlayer().hasPermission( "bungeesuite.chat.channel.nation" );
+//                }
+//            } else {
+//                return ChannelManager.isAdmin( c ) && p.getPlayer().hasPermission( "bungeesuite.chat.channel.admin" );
+//            }
+//        } else {
+//            return p.getPlayer().hasPermission( "bungeesuite.chat.channel.custom" );
+//        }
+//        return false;
+//
+//    }
 
-    public static void toggleToPlayersFactionChannel( CommandSender sender, String channel ) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream( b );
-        try {
-            out.writeUTF( "ToggleToPlayersFactionChannel" );
-            out.writeUTF( sender.getName() );
-            out.writeUTF( channel );
-            out.writeBoolean( getFactionChannelPerm( sender ) );
-        } catch ( IOException s ) {
-            s.printStackTrace();
-        }
-        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
-
-    }
-
-    public static void toggleToPlayersTownyChannel( CommandSender sender, String channel ) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream( b );
-        try {
-            out.writeUTF( "ToggleToPlayersTownyChannel" );
-            out.writeUTF( sender.getName() );
-            out.writeUTF( channel );
-            out.writeBoolean( getTownyChannelPerm( sender ) );
-            if ( BungeeSuiteChat.towny ) {
-                out.writeBoolean( inNation( sender ) );
-            } else {
-                out.writeBoolean( false );
-            }
-
-        } catch ( IOException s ) {
-            s.printStackTrace();
-        }
-        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
-
-    }
-
-    private static boolean inNation( CommandSender sender ) {
-        if ( !BungeeSuiteChat.towny ) {
-            return false;
-        } else {
-            Resident r;
-            try {
-                r = TownyUniverse.getDataSource().getResident( sender.getName() );
-            } catch ( NotRegisteredException e ) {
-                return false;
-            }
-            try {
-                return r.getTown().hasNation();
-            } catch ( NotRegisteredException e ) {
-                return false;
-            }
-        }
-    }
 
     public static void getChannelInfo( CommandSender sender, String channel ) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -516,62 +358,4 @@ public class ChannelManager {
 
     }
 
-
-    public static void requestFactionChannels() {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream( b );
-        try {
-            out.writeUTF( "GetFactionChannels" );
-        } catch ( IOException s ) {
-            s.printStackTrace();
-        }
-        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
-    }
-
-    public static void requestTownyChannels() {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream( b );
-        try {
-            out.writeUTF( "GetTownyChannels" );
-        } catch ( IOException s ) {
-            s.printStackTrace();
-        }
-        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
-    }
-
-    public static Collection<Player> getTownPlayers( Player player ) {
-        Collection<Player> townPlayers = new ArrayList<>();
-        Resident r;
-        try {
-            r = TownyUniverse.getDataSource().getResident( player.getName() );
-            Town t = r.getTown();
-            for ( Player ps : TownyUniverse.getOnlinePlayers( t ) ) {
-                if ( ps.hasPermission( "bungeesuite.chat.channel.town" ) ) {
-                    townPlayers.add( ps );
-                }
-            }
-        } catch ( NotRegisteredException e ) {
-            e.printStackTrace();
-        }
-
-        return townPlayers;
-    }
-
-    public static Collection<Player> getNationPlayers( Player player ) {
-        Collection<Player> townPlayers = new ArrayList<>();
-        Resident r;
-        try {
-            r = TownyUniverse.getDataSource().getResident( player.getName() );
-            Nation n = r.getTown().getNation();
-            for ( Player ps : TownyUniverse.getOnlinePlayers( n ) ) {
-                if ( ps.hasPermission( "bungeesuite.chat.channel.nation" ) ) {
-                    townPlayers.add( ps );
-                }
-            }
-        } catch ( NotRegisteredException e ) {
-            e.printStackTrace();
-        }
-
-        return townPlayers;
-    }
 }

@@ -39,12 +39,6 @@ public class LoginListener implements Listener {
                 public void run() {
                     if ( !ChannelManager.receivedChannels ) {
                         ChannelManager.requestChannels();
-                        if ( BungeeSuiteChat.factionChat ) {
-                            ChannelManager.requestFactionChannels();
-                        }
-                        if ( BungeeSuiteChat.towny ) {
-                            ChannelManager.requestTownyChannels();
-                        }
                     }
                 }
             }, 10L );

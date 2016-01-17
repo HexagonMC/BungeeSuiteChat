@@ -53,23 +53,7 @@ public class ChatListener implements Listener {
         } else if ( ChannelManager.isAdmin( p.getChannel() ) ) {
             e.getRecipients().clear();
             e.getRecipients().addAll( ChannelManager.getAdminPlayers() );
-        } else if ( BungeeSuiteChat.factionChat && ChannelManager.isFactionChannel( p.getChannel() ) ) {
-            if ( ChannelManager.isFaction( p.getChannel() ) ) {
-                e.getRecipients().clear();
-                e.getRecipients().addAll( ChannelManager.getFactionPlayers( e.getPlayer() ) );
-            } else if ( ChannelManager.isFactionAlly( p.getChannel() ) ) {
-                e.getRecipients().clear();
-                e.getRecipients().addAll( ChannelManager.getFactionAllyPlayers( e.getPlayer() ) );
-            }
-        } else if ( BungeeSuiteChat.towny && ChannelManager.isTownyChannel( p.getChannel() ) ) {
-            if ( p.getChannel().getName().equals( "Town" ) ) {
-                e.getRecipients().clear();
-                e.getRecipients().addAll( ChannelManager.getTownPlayers( e.getPlayer() ) );
-            } else if ( p.getChannel().getName().equals( "Nation" ) ) {
-                e.getRecipients().clear();
-                e.getRecipients().addAll( ChannelManager.getNationPlayers( e.getPlayer() ) );
-            }
-        }
+        } 
     }
 
     @EventHandler( priority = EventPriority.HIGH )
