@@ -34,12 +34,14 @@ public class MessageListener implements PluginMessageListener {
         }
         assert channel != null;
         if ( channel.equals( "SendGlobalChat" ) ) {
-            try {
-                ChannelManager.getGlobalChat( in.readUTF(), in.readUTF() );
-            } catch ( IOException e ) {
-                e.printStackTrace();
-            }
-            return;
+        	if(BungeeSuiteChat.global){
+	            try {
+	                ChannelManager.getGlobalChat( in.readUTF(), in.readUTF() );
+	            } catch ( IOException e ) {
+	                e.printStackTrace();
+	            }
+	            return;
+        	}
         }
         if ( channel.equals( "GetVersion" ) ) {
             String p = null;
