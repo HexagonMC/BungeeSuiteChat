@@ -20,7 +20,7 @@ public class BSPlayer {
     private boolean afk;
     private ArrayList<String> ignores = new ArrayList<String>();
 
-    public BSPlayer( String name, String nickname, String channel, boolean muted, boolean chatspying, boolean dnd, boolean tps ) {
+    public BSPlayer( String name, String nickname, String channel, boolean muted, boolean chatspying, boolean dnd ) {
         this.playername = name;
         this.nickname = nickname;
         this.channel = channel;
