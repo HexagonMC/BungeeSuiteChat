@@ -194,10 +194,6 @@ permissions:
             bungeesuite.chat.channel.server: true
             bungeesuite.chat.channel.local: true
             bungeesuite.chat.channel.global: true
-            bungeesuite.chat.channel.faction: true
-            bungeesuite.chat.channel.factionally: true
-            bungeesuite.chat.channel.nation: true
-            bungeesuite.chat.channel.town: true
             bungeesuite.chat.command.afk: true
             bungeesuite.chat.command.channelinfo: true
             bungeesuite.chat.command.ignore: true
