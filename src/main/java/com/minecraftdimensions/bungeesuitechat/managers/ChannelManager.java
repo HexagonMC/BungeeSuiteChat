@@ -107,18 +107,6 @@ public class ChannelManager {
         return channel.getName().equals( "Admin" );
     }
 
-    public static Collection<Player> getNonLocal( Player player ) {
-        Collection<Player> nonLocals = new ArrayList<>();
-        for ( Player p : Bukkit.getOnlinePlayers() ) {
-            if ( !p.getWorld().equals( player.getWorld() ) || p.getLocation().distance( player.getLocation() ) > ServerData.getLocalDistance() ) {
-                nonLocals.add( p );
-            } else if ( !p.hasPermission( "bungeesuite.chat.channel.local" ) ) {
-                nonLocals.add( p );
-            }
-        }
-        return nonLocals;
-    }
-
     public static Collection<Player> getServerPlayers() {
         Collection<Player> serverPlayers = new ArrayList<>();
         for ( Player p : Bukkit.getOnlinePlayers() ) {
@@ -285,8 +273,6 @@ public class ChannelManager {
                 return p.getPlayer().hasPermission( "bungeesuite.chat.channel.global" );
             } else if ( ChannelManager.isServer( c ) ) {
                 return p.getPlayer().hasPermission( "bungeesuite.chat.channel.server" );
-            } else if ( ChannelManager.isLocal( c ) ) {
-                return p.getPlayer().hasPermission( "bungeesuite.chat.channel.local" );
             } else {
                 return ChannelManager.isAdmin( c ) && p.getPlayer().hasPermission( "bungeesuite.chat.channel.admin" );
             }

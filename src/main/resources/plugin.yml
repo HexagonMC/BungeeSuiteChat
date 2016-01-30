@@ -58,14 +58,6 @@ commands:
         permission: bungeesuite.chat.command.ignores
         permission-message: §cYou do not have permission for this command
         usage: /<command>
-    local:
-        description: Send messages/toggle to the local channel
-        aliases: [l,lc,localchannel,lchannel,channellocal]
-        permission: bungeesuite.chat.channel.local
-        permission-message: §cYou do not have permission for this channel
-        usage: |
-            /<command> - toggles to local channel
-            /<command> (message) - sends message to the local channel
     me:
         description: Sends an emote to the chat on your server
         aliases: [emote]
@@ -192,7 +184,6 @@ permissions:
         description: Gives access to all BungeeSuiteChat user commands
         children:
             bungeesuite.chat.channel.server: true
-            bungeesuite.chat.channel.local: true
             bungeesuite.chat.channel.global: true
             bungeesuite.chat.command.afk: true
             bungeesuite.chat.command.channelinfo: true
