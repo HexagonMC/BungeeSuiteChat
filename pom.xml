@@ -9,10 +9,6 @@
 
     <name>BungeeSuiteChat</name>
     <url>http://minecraftdimensions.com</url>
-    
-    <properties>
-        <build.number>${BUILD_NUMBER}</build.number>
-    </properties>
 
     <repositories>
         <repository>
@@ -41,7 +37,7 @@
     </dependencies>
     
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>${project.name}_${project.version}</finalName>
         <resources>
             <resource>
                 <targetPath>.</targetPath>
