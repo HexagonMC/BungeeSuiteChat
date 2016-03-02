@@ -71,7 +71,6 @@ public class BungeeSuiteChat extends JavaPlugin {
         getCommand( "global" ).setExecutor( new GlobalCommand() );
         getCommand( "ignore" ).setExecutor( new IgnoreCommand() );
         getCommand( "ignores" ).setExecutor( new IgnoresCommand() );
-        getCommand( "local" ).setExecutor( new LocalCommand() );
         getCommand( "me" ).setExecutor( new MeCommand() );
         getCommand( "message" ).setExecutor( new MessageCommand() );
         getCommand( "mute" ).setExecutor( new MuteCommand() );
