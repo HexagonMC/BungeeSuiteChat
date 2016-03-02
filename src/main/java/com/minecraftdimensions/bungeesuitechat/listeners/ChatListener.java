@@ -5,7 +5,6 @@ import com.minecraftdimensions.bungeesuitechat.Utilities;
 import com.minecraftdimensions.bungeesuitechat.managers.ChannelManager;
 import com.minecraftdimensions.bungeesuitechat.managers.PlayerManager;
 import com.minecraftdimensions.bungeesuitechat.objects.BSPlayer;
-import com.minecraftdimensions.bungeesuitechat.objects.ServerData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;

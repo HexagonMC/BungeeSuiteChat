@@ -91,10 +91,6 @@ public class ChannelManager {
         channels = chans;
     }
 
-    public static boolean isLocal( Channel channel ) {
-        return channel.getName().equals( ServerData.getServerName() + " Local" );
-    }
-
     public static boolean isServer( Channel channel ) {
         return channel.getName().equals( ServerData.getServerName() );
     }
