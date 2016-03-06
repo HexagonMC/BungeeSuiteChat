@@ -53,6 +53,18 @@ public class Utilities {
         return ChatColor.translateAlternateColorCodes( '&', input );
     }
 
+    public static void requestPlayer( String player ) {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream( b );
+        try {
+            out.writeUTF( "GetPlayer" );
+            out.writeUTF( player );
+        } catch ( IOException s ) {
+            s.printStackTrace();
+        }
+        new PluginMessageTask( b ).runTaskAsynchronously( BungeeSuiteChat.instance );
+    }
+    
     public static void logChat( String chat ) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream( b );

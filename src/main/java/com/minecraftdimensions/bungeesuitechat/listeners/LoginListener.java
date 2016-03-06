@@ -53,7 +53,7 @@ public class LoginListener implements Listener {
                 }
             }
 
-        }, 10L );
+        }, 30L ); // Increase this as this MAY be too fast
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

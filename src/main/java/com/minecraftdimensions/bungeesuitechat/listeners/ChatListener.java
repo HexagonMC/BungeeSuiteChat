@@ -22,6 +22,8 @@ public class ChatListener implements Listener {
         BSPlayer p = PlayerManager.getPlayer( e.getPlayer() );
         if ( p == null ) {
             Bukkit.getConsoleSender().sendMessage( ChatColor.DARK_RED + "Player did not connect properly through BungeeCord, Chat canceled!" );
+            Utilities.requestPlayer( e.getPlayer().getName() ); // if we failed sending the message, lets request the player again
+            e.getPlayer().sendMessage( ChatColor.RED + "Fehler beim Senden deiner Nachricht. Versuche es in einigen Augenblicken erneut."); // inform the player about this
             e.setCancelled( true );
             return;
         }
