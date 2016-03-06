@@ -47,7 +47,15 @@ public class PlayerManager {
     }
 
     public static boolean isPlayerOnline( String player ) {
-        return onlinePlayers.containsKey( player );
+    	if( !onlinePlayers.containsKey( player ) )
+    		return false;
+    	
+        if( onlinePlayers.get( player ) == null ) {
+        	onlinePlayers.remove( player );
+        	return false;
+        }
+        
+        return true;
     }
 
     public static BSPlayer getPlayer( CommandSender sender ) {
