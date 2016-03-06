@@ -15,8 +15,8 @@ public class PluginMessageTask extends BukkitRunnable {
     }
 
     public void run() {
-        if ( Bukkit.getOnlinePlayers().size() > 0 ) {
-            Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage( BungeeSuiteChat.instance, BungeeSuiteChat.OUTGOING_PLUGIN_CHANNEL, bytes.toByteArray() );
+        if ( Bukkit.getOnlinePlayers().length > 0 ) {
+            Bukkit.getOnlinePlayers()[0].sendPluginMessage( BungeeSuiteChat.instance, BungeeSuiteChat.OUTGOING_PLUGIN_CHANNEL, bytes.toByteArray() );
         }
     }
 
